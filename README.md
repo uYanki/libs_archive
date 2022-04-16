@@ -1,5 +1,17 @@
 # libs_archive
 
+### vscode - code runner
+
+多文件编译的方法：
+
+`setting` — `Code-runner: Executor Map`：
+
+![在这里插入图片描述](README.assets/code runner.png)
+
+`gcc $fileName` 改 `gcc *.c`  ，`g++ $fileName` 改 `g++ *.cpp` 即可。
+
+### doucment list
+
 * #### data structure `数据结构`
 
   * c：
