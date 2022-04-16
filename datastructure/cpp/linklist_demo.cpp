@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int main() {
+int _main() {
     LinkList<int> L;
 
     cout << "-------PUSH&POP------------" << endl;
@@ -11,8 +11,8 @@ int main() {
     L.print_front_to_back();
     L.print_back_to_front();
     cout << "len:" << L.length() << endl;
-    cout << "pop_front:" << L.pop_front() << endl;
-    cout << "pop_back:" << L.pop_back() << endl;
+    cout << "pop_front:" << L.front() << endl;
+    cout << "pop_back:" << L.back() << endl;
     L.print_front_to_back();
     L.print_back_to_front();
     cout << "--------INSERT-----------" << endl;

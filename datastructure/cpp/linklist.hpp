@@ -28,17 +28,20 @@ template <typename T>
 class LinkList {
 private:
     uint32_t len;
-    Node<T>* pFirst;
-    Node<T>* pLast;
+    Node<T>* pFront;
+    Node<T>* pBack;
 
 public:
-    LinkList() { pFirst = pLast = NULL, len = 0; }
+    LinkList() { pFront = pBack = NULL, len = 0; }
     ~LinkList() { clear(); }
 
-    Node<T>* begin() { return pFirst; }
-    Node<T>* end() { return pLast; }
+    Node<T>* begin() { return pFront; }
+    Node<T>* end() { return pBack; }
     // for (auto p = L.begin(); p != NULL; p = p->pNext) {}
     // for (auto p = L.end(); p != NULL; p = p->pPrev) {}
+
+    T front() { return pFront->data; }
+    T back() { return pBack->data; }
 
     // get length
     uint32_t length() { return len; }
@@ -48,8 +51,8 @@ public:
     LinkList<T>* push_front(T data);
 
     // delete one
-    T pop_back();
-    T pop_front();
+    LinkList<T>* pop_back();
+    LinkList<T>* pop_front();
 
     // get node from index
     Node<T>* node_from_index(int index /*<0:back_to_front;>=0:front_to_back*/);
@@ -84,55 +87,53 @@ LinkList<T>& operator+(LinkList<T>& linklist, const T& data) {
 
 template <typename T>
 LinkList<T>* LinkList<T>::push_back(T data) {
-    pLast = new Node<T>(data, pLast, NULL);
-    if (pFirst == NULL) pFirst = pLast;
+    pBack = new Node<T>(data, pBack, NULL);
+    if (pFront == NULL) pFront = pBack;
     ++len;
     return this;
 }
 
 template <typename T>
 LinkList<T>* LinkList<T>::push_front(T data) {
-    pFirst = new Node<T>(data, NULL, pFirst);
-    if (pLast == NULL) pLast = pFirst;
+    pFront = new Node<T>(data, NULL, pFront);
+    if (pBack == NULL) pBack = pFront;
     ++len;
     return this;
 }
 
 // delete one
 template <typename T>
-T LinkList<T>::pop_back() {
+LinkList<T>* LinkList<T>::pop_back() {
     assert(len);
-    T data = pLast->data;
 
     if (len == 1) {
-        delete pLast;
-        pFirst = pLast = NULL;
+        delete pBack;
+        pFront = pBack = NULL;
     } else {
-        Node<T>* p = pLast;
-        pLast = pLast->pPrev;
+        Node<T>* p = pBack;
+        pBack = pBack->pPrev;
         delete p;
     }
 
     --len;
-    return data;
+    return this;
 }
 
 template <typename T>
-T LinkList<T>::pop_front() {
+LinkList<T>* LinkList<T>::pop_front() {
     assert(len);
-    T data = pFirst->data;
 
     if (len == 1) {
-        delete pFirst;
-        pFirst = pLast = NULL;
+        delete pFront;
+        pFront = pBack = NULL;
     } else {
-        Node<T>* p = pFirst;
-        pFirst = pFirst->pNext;
+        Node<T>* p = pFront;
+        pFront = pFront->pNext;
         delete p;
     }
 
     --len;
-    return data;
+    return this;
 }
 
 // get node from index
@@ -142,13 +143,13 @@ Node<T>* LinkList<T>::node_from_index(int index /*<0:back_to_front;>=0:front_to_
         // back_to_front
         index = abs(index) - 1;
         assert(index < len);
-        Node<T>* p = pLast;
+        Node<T>* p = pBack;
         while (index--) { p = p->pPrev; }
         return p;
     } else {
         // front_to_back
         assert(index < len);
-        Node<T>* p = pFirst;
+        Node<T>* p = pFront;
         while (index--) { p = p->pNext; }
         return p;
     }
@@ -160,7 +161,7 @@ LinkList<T>* LinkList<T>::insert_before(uint32_t index, T data) {
     assert(len);  // can't insert if len is zero.
     Node<T>* p = node_from_index(index);
     Node<T>* pInsert = new Node<T>(data, p->pPrev, p);
-    if (p == pFirst) pFirst = pInsert;
+    if (p == pFront) pFront = pInsert;
     ++len;
     return this;
 }
@@ -169,7 +170,7 @@ LinkList<T>* LinkList<T>::insert_after(uint32_t index, T data) {
     assert(len);  // can't insert if len is zero.
     Node<T>* p = node_from_index(index);
     Node<T>* pInsert = new Node<T>(data, p, p->pNext);
-    if (p == pLast) pLast = pInsert;
+    if (p == pBack) pBack = pInsert;
     ++len;
     return this;
 }
@@ -179,8 +180,8 @@ template <typename T>
 T LinkList<T>::remove(uint32_t index) {
     Node<T>* p = node_from_index(index);
     T data = p->data;
-    if (p == pFirst) pFirst = p->pNext;
-    if (p == pLast) pLast = p->pPrev;
+    if (p == pFront) pFront = p->pNext;
+    if (p == pBack) pBack = p->pPrev;
     delete p;
     --len;
     return data;
@@ -189,38 +190,38 @@ T LinkList<T>::remove(uint32_t index) {
 template <typename T>
 LinkList<T>* LinkList<T>::clear() {
     Node<T>* p;
-    while (p = pFirst) {
-        pFirst = pFirst->pNext;
+    while (p = pFront) {
+        pFront = pFront->pNext;
         delete p;
     }
     len = 0;
-    pFirst = pLast = NULL;
+    pFront = pBack = NULL;
     return this;
 }
 template <typename T>
 
 // reverse linklist
 LinkList<T>* LinkList<T>::reverse() {
-    Node<T>*p = pFirst, *tmp;
+    Node<T>*p = pFront, *tmp;
     while (p) {
         tmp = p->pPrev;
         p->pPrev = p->pNext;
         p->pNext = tmp;
         p = p->pPrev;
     }
-    p = pFirst;
-    pFirst = pLast;
-    pLast = p;
+    p = pFront;
+    pFront = pBack;
+    pBack = p;
     return this;
 }
 
 template <typename T>
 void LinkList<T>::print_front_to_back() {
-    for (auto p = pFirst; p != NULL; p = p->pNext) std::cout << p->data << " ";
+    for (auto p = pFront; p != NULL; p = p->pNext) std::cout << p->data << " ";
     std::cout << std::endl;
 }
 template <typename T>
 void LinkList<T>::print_back_to_front() {
-    for (auto p = pLast; p != NULL; p = p->pPrev) std::cout << p->data << " ";
+    for (auto p = pBack; p != NULL; p = p->pPrev) std::cout << p->data << " ";
     std::cout << std::endl;
 }

@@ -19,3 +19,9 @@
     * linkstack：链栈
   * cpp：
     * linklist：链表
+    * mat：2维数组
+
+* #### algorithm `算法`
+
+  * find_min_and_max：滑动窗口取最大最小值
+  * find_peak_and_trough：找波峰波谷
