@@ -24,6 +24,10 @@ int main() {
     L.insert_after(-1, 999);
     L.print_front_to_back();
     L.print_back_to_front();
+    cout << "--------ADD-----------" << endl;
+    9 + (7 + (8 + L)) + 7 + 8 + 9;  // 注:前加要添加括号
+    L.print_front_to_back();
+    L.print_back_to_front();
     cout << "--------REVERSE-----------" << endl;
     cout << "origin:" << endl;
     L.print_front_to_back();

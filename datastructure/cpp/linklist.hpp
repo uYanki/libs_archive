@@ -8,10 +8,10 @@
 template <typename T>
 struct Node {
     T data;
-    Node* pNext;
-    Node* pPrev;
+    Node<T>* pNext;
+    Node<T>* pPrev;
 
-    Node(T data, Node* prev, Node* next) {
+    Node(T data, Node<T>* prev, Node<T>* next) {
         if (prev) prev->pNext = this;
         if (next) next->pPrev = this;
         this->data = data;
@@ -22,13 +22,6 @@ struct Node {
         if (pPrev) pPrev->pNext = pNext;
         if (pNext) pNext->pPrev = pPrev;
     }
-
-    // for(auto node=LinkList.begin();node!=LinkList.end();node++)
-    Node<T>* operator--() { return pPrev; }     // 前置减减
-    Node<T>* operator--(int) { return pPrev; }  // 后置减减
-    Node<T>* operator++() { return pNext; }     // 前置加加
-    Node<T>* operator++(int) { return pNext; }  // 后置加加
-    // 区分前置和后置的本质: val++ -> val+0
 };
 
 template <typename T>
@@ -44,6 +37,8 @@ public:
 
     Node<T>* begin() { return pFirst; }
     Node<T>* end() { return pLast; }
+    // for (auto p = L.begin(); p != NULL; p = p->pNext) {}
+    // for (auto p = L.end(); p != NULL; p = p->pPrev) {}
 
     // get length
     uint32_t length() { return len; }
@@ -221,19 +216,11 @@ LinkList<T>* LinkList<T>::reverse() {
 
 template <typename T>
 void LinkList<T>::print_front_to_back() {
-    Node<T>* p = pFirst;
-    while (p) {
-        std::cout << p->data << " ";
-        p = p->pNext;
-    }
+    for (auto p = pFirst; p != NULL; p = p->pNext) std::cout << p->data << " ";
     std::cout << std::endl;
 }
 template <typename T>
 void LinkList<T>::print_back_to_front() {
-    Node<T>* p = pLast;
-    while (p) {
-        std::cout << p->data << " ";
-        p = p->pPrev;
-    }
+    for (auto p = pLast; p != NULL; p = p->pPrev) std::cout << p->data << " ";
     std::cout << std::endl;
 }
