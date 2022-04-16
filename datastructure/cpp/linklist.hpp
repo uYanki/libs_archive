@@ -184,6 +184,8 @@ template <typename T>
 T LinkList<T>::remove(uint32_t index) {
     Node<T>* p = node_from_index(index);
     T data = p->data;
+    if (p == pFirst) pFirst = p->pNext;
+    if (p == pLast) pLast = p->pPrev;
     delete p;
     --len;
     return data;
@@ -197,6 +199,7 @@ LinkList<T>* LinkList<T>::clear() {
         delete p;
     }
     len = 0;
+    pFirst = pLast = NULL;
     return this;
 }
 template <typename T>
