@@ -6,7 +6,7 @@
 
 `setting` — `Code-runner: Executor Map`：
 
-![在这里插入图片描述](README.assets/code runner.png)
+![在这里插入图片描述](README.assets/code_runner.png)
 
 `gcc $fileName` 改 `gcc *.c`  ，`g++ $fileName` 改 `g++ *.cpp` 即可。
 
