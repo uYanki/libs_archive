@@ -63,9 +63,8 @@ void mat<T>::print() {
     uint32_t start_col = 0, start_row = 0;
     uint32_t end_col = w, end_row = h;
     for (int col = start_col; col < end_col; ++col) {
-        for (int row = start_row; row < end_row; ++row) {  //
+        for (int row = start_row; row < end_row; ++row)  //
             std::cout << p[row * w + col] << "  ";
-        }
         std::cout << std::endl;
     }
 }
