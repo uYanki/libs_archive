@@ -14,7 +14,7 @@ using namespace std;
 template <typename T>
 class ring_fifo {
 private:
-    T* m_data;
+    T*       m_data;
     uint32_t m_maxsize;      /*最大储存数*/
     uint32_t m_head, m_tail; /*头尾索引*/
 public:
@@ -25,7 +25,12 @@ public:
     ring_fifo<T>* pop();
 
     T front() { return m_data[m_head]; }
+    T back() { return *item_from_index(-1); }
+
     T* begin() { return m_data + m_head; }
+    T* end() { return item_from_index(-1); }
+
+    T* item_from_index(int index);
 
     bool is_empty() { return m_head == m_tail; }
     bool is_full() { return m_head == (m_tail + 1) % m_maxsize; }
@@ -57,6 +62,17 @@ ring_fifo<T>* ring_fifo<T>::pop() {
     assert(!is_empty());
     if (++m_head == m_maxsize) m_head = 0;
     return this;
+}
+
+template <typename T>
+T* ring_fifo<T>::item_from_index(int index) {
+    if (index >= 0) {
+        assert(index < size());
+        return m_data + (m_head + index) % m_maxsize;
+    } else {
+        assert(index >= -size());
+        return m_data + (m_tail + index + m_maxsize) % m_maxsize;
+    }
 }
 
 template <typename T>
