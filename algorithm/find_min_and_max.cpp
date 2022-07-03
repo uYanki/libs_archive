@@ -36,7 +36,7 @@ int find_min_and_max(T arr[], size_t len, size_t wnd_size) {
 
 int _main() {
     int arr[] = {5, 2, 6, 8, 10, 7, 4};
-    int len = sizeof(arr) / sizeof(int);  // number of elements
+    int len   = sizeof(arr) / sizeof(int);  // number of elements
     find_min_and_max(arr, len, 4);
     return 0;
 }
