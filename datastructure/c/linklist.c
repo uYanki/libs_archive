@@ -1,8 +1,9 @@
 #include "linklist.h"
 
 pLinkList linklist_create(void) {
-    pLinkList p = malloc(sizeof(LinkList));
-    p->pBack = p->pFront = (void*)0;
+    pLinkList linklist = malloc(sizeof(LinkList));
+    linklist->pBack = linklist->pFront = (void*)0;
+    return linklist;
 }
 
 void linklist_destroy(pLinkList linklist) {
@@ -31,18 +32,17 @@ pLinkNode linklist_insert_after(pLinkList linklist, pLinkNode linknode, ElemType
 
     pLinkNode node = malloc(sizeof(LinkNode));
 
+    if (linklist->pBack == linknode)
+        linklist->pBack = node;
+
     node->data  = data;
     node->pPrev = linknode;
     node->pNext = linknode->pNext;
 
     if (linknode->pNext)
         linknode->pNext->pPrev = node;
-    linknode->pNext = node;
 
-    if (linklist->pBack == linknode)
-        linklist->pBack = node;
-
-    return node;
+    return linknode->pNext = node;
 }
 
 pLinkNode linklist_insert_before(pLinkList linklist, pLinkNode linknode, ElemType data) {
@@ -51,18 +51,17 @@ pLinkNode linklist_insert_before(pLinkList linklist, pLinkNode linknode, ElemTyp
 
     pLinkNode node = malloc(sizeof(LinkNode));
 
+    if (linklist->pFront == linknode)
+        linklist->pFront = node;
+
     node->data  = data;
     node->pNext = linknode;
     node->pPrev = linknode->pPrev;
 
     if (linknode->pPrev)
         linknode->pPrev->pNext = node;
-    linknode->pPrev = node;
 
-    if (linklist->pFront == linknode)
-        linklist->pFront = node;
-
-    return node;
+    return linknode->pPrev = node;
 }
 
 pLinkNode linklist_push_front(pLinkList linklist, ElemType data) {
